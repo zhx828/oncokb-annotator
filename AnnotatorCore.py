@@ -138,6 +138,7 @@ def processalterationevents(eventfile, outfile, previousoutfile, defaultCancerTy
         outf.write("\tis-a-3d-hotspot")
 
         # outf.write("\tmutation_effect")
+        outf.write("\tOncoTreeCode")
         outf.write("\toncogenic")
         outf.write("\tDiagnosis")
         outf.write("\tPrognosis")
@@ -863,6 +864,7 @@ def pulloncokb(hugo, proteinchange, alterationtype, consequence, start, end, can
         oncokbdata['oncogenic'] = "Unknown"
         oncokbdata['diagnosis'] = ""
         oncokbdata['prognosis'] = ""
+        oncokbdata['cancertype'] = cancertype or ""
         # oncokbdata['mutation_effect'] = "Unknown"
 
         try:
@@ -916,6 +918,7 @@ def pulloncokb(hugo, proteinchange, alterationtype, consequence, start, end, can
     oncokbdata = oncokbcache[key]
     ret = []
     # ret.append(oncokbdata['mutation_effect'])
+    ret.append(oncokbdata['cancertype'])
     ret.append(oncokbdata['oncogenic'])
     ret.append(oncokbdata['diagnosis'])
     ret.append(oncokbdata['prognosis'])
