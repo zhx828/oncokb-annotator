@@ -139,6 +139,8 @@ def processalterationevents(eventfile, outfile, previousoutfile, defaultCancerTy
 
         # outf.write("\tmutation_effect")
         outf.write("\toncogenic")
+        outf.write("\tDiagnosis")
+        outf.write("\tPrognosis")
 
         for l in levels:
             outf.write('\t' + l)
@@ -761,6 +763,8 @@ def cacheannotated(annotatedfile, defaultCancerType, cancerTypeMap):
             icancertype = geIndexOfHeader(headers, ['ONCOTREE_CODE', 'CANCER_TYPE'])
             # imutationeffect = headers['MUTATION_EFFECT']
             ioncogenic = headers['ONCOGENIC']
+            idiagnosis = headers['DIAGNOSIS']
+            iprognosis = headers['PROGNOSIS']
 
             for row in reader:
                 try:
@@ -784,6 +788,8 @@ def cacheannotated(annotatedfile, defaultCancerType, cancerTypeMap):
                     oncokbcache[key] = {}
                     # oncokbcache[key]['mutation_effect'] = row[imutationeffect]
                     oncokbcache[key]['oncogenic'] = row[ioncogenic]
+                    oncokbcache[key]['dignosis'] = row[idiagnosis]
+                    oncokbcache[key]['prognosis'] = row[iprognosis]
                     for l in levels:
                         il = headers[l]
                         if il < len(row):
@@ -855,6 +861,8 @@ def pulloncokb(hugo, proteinchange, alterationtype, consequence, start, end, can
             oncokbdata[l] = []
 
         oncokbdata['oncogenic'] = "Unknown"
+        oncokbdata['dignosis'] = ""
+        oncokbdata['prognosis'] = ""
         # oncokbdata['mutation_effect'] = "Unknown"
 
         try:
@@ -871,6 +879,19 @@ def pulloncokb(hugo, proteinchange, alterationtype, consequence, start, end, can
 
             # oncogenic
             oncokbdata['oncogenic'] = evidences['oncogenic']
+
+            # diagnosis
+            if evidences['diagnosis'] is None:
+                oncokbdata['diagnosis'] = ""
+            else:
+                oncokbdata['diagnosis'] = evidences['diagnosis'].level
+
+            # prognosis
+            if evidences['prognosis'] is None:
+                oncokbdata['prognosis'] = ""
+            else:
+                oncokbdata['prognosis'] = evidences['prognosis'].level
+            # oncokbdata['prognosis'] = evidences['prognosis'] if evidences['prognosis'] else {level:""}
 
             # get treatment
             for treatment in evidences['treatments']:
@@ -897,6 +918,8 @@ def pulloncokb(hugo, proteinchange, alterationtype, consequence, start, end, can
     ret = []
     # ret.append(oncokbdata['mutation_effect'])
     ret.append(oncokbdata['oncogenic'])
+    ret.append(oncokbdata['dignosis'])
+    ret.append(oncokbdata['prognosis'])
     for l in levels:
         ret.append(','.join(oncokbdata[l]))
     ret.append(gethighestsensitivitylevel(oncokbdata))
