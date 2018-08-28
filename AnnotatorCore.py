@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 
 csv.field_size_limit(sys.maxsize) # for reading large files
 
-oncokbbaseurl = "http://oncokb.org"
+oncokbbaseurl = "http://localhost:8080/oncokb"
 def setoncokbbaseurl(u):
     global oncokbbaseurl
     oncokbbaseurl = u
@@ -788,7 +788,7 @@ def cacheannotated(annotatedfile, defaultCancerType, cancerTypeMap):
                     oncokbcache[key] = {}
                     # oncokbcache[key]['mutation_effect'] = row[imutationeffect]
                     oncokbcache[key]['oncogenic'] = row[ioncogenic]
-                    oncokbcache[key]['dignosis'] = row[idiagnosis]
+                    oncokbcache[key]['diagnosis'] = row[idiagnosis]
                     oncokbcache[key]['prognosis'] = row[iprognosis]
                     for l in levels:
                         il = headers[l]
@@ -861,7 +861,7 @@ def pulloncokb(hugo, proteinchange, alterationtype, consequence, start, end, can
             oncokbdata[l] = []
 
         oncokbdata['oncogenic'] = "Unknown"
-        oncokbdata['dignosis'] = ""
+        oncokbdata['diagnosis'] = ""
         oncokbdata['prognosis'] = ""
         # oncokbdata['mutation_effect'] = "Unknown"
 
@@ -881,17 +881,16 @@ def pulloncokb(hugo, proteinchange, alterationtype, consequence, start, end, can
             oncokbdata['oncogenic'] = evidences['oncogenic']
 
             # diagnosis
-            if evidences['diagnosis'] is None:
+            if evidences['diagnosis'] is None or evidences['diagnosis']['level']is None:
                 oncokbdata['diagnosis'] = ""
             else:
-                oncokbdata['diagnosis'] = evidences['diagnosis'].level
+                oncokbdata['diagnosis'] = evidences['diagnosis']['level']
 
             # prognosis
-            if evidences['prognosis'] is None:
+            if evidences['prognosis'] is None or evidences['prognosis']['level'] is None:
                 oncokbdata['prognosis'] = ""
             else:
-                oncokbdata['prognosis'] = evidences['prognosis'].level
-            # oncokbdata['prognosis'] = evidences['prognosis'] if evidences['prognosis'] else {level:""}
+                oncokbdata['prognosis'] = evidences['prognosis']['level']
 
             # get treatment
             for treatment in evidences['treatments']:
@@ -918,7 +917,7 @@ def pulloncokb(hugo, proteinchange, alterationtype, consequence, start, end, can
     ret = []
     # ret.append(oncokbdata['mutation_effect'])
     ret.append(oncokbdata['oncogenic'])
-    ret.append(oncokbdata['dignosis'])
+    ret.append(oncokbdata['diagnosis'])
     ret.append(oncokbdata['prognosis'])
     for l in levels:
         ret.append(','.join(oncokbdata[l]))
