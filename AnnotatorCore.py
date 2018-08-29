@@ -251,7 +251,10 @@ def processsv(svdata, outfile, previousoutfile, defaultCancerType, cancerTypeMap
         headers = readheaders(reader)
         outf.write(headers['^-$'])
         # outf.write("\tmutation_effect")
+        outf.write("\tOncoTreeCode")
         outf.write("\toncogenic")
+        outf.write("\tDiagnosis")
+        outf.write("\tPrognosis")
         for l in levels:
             outf.write('\t' + l)
         outf.write("\tHighest_level\n")
