@@ -45,6 +45,15 @@ levels = [
     'LEVEL_R1'
 ]
 
+dxpxLevels = [
+    'LEVEL_Dx1',
+    'LEVEL_Dx2',
+    'LEVEL_Dx3',
+    'LEVEL_Px1',
+    'LEVEL_Px2',
+    'LEVEL_Px3',
+    'LEVEL_Px4',
+]
 mutationtypeconsequencemap = {
     '3\'Flank': ['any'],
     '5\'Flank ': ['any'],
@@ -365,7 +374,10 @@ def processcnagisticdata(cnafile, outfile, previousoutfile, defaultCancerType, c
 
         outf.write('SAMPLE_ID\tCANCER_TYPE\tHUGO_SYMBOL\tALTERATION')
         # outf.write("\tmutation_effect")
+        outf.write("\tOncoTreeCode")
         outf.write("\toncogenic")
+        outf.write("\tDiagnosis")
+        outf.write("\tPrognosis")
         for l in levels:
             outf.write('\t' + l)
         outf.write("\tHighest_level\n")
@@ -501,6 +513,15 @@ def processclinicaldata(annotatedmutfiles, clinicalfile, outfile):
                         if not l.startswith('LEVEL_R'):
                             sampleactionablecount[sample] += 1
 
+                for column in ['DIAGNOSIS', 'PROGNOSIS']:
+                    il = headers[column]
+                    if il < len(row) and row[il] != '':
+                        val = row[il]
+                        if val not in samplelevels[sample]:
+                            samplelevels[sample][val] = []
+                        samplelevels[sample][val].append(variant)
+
+
     outf = open(outfile, 'w+')
 
     # export to anntoated file
@@ -510,7 +531,12 @@ def processclinicaldata(annotatedmutfiles, clinicalfile, outfile):
         outf.write(headers['^-$'])
         for l in levels:
             outf.write('\t' + l)
-        outf.write('\tHIGHEST_LEVEL\toncogenic_mutations\t#actionable_mutations\t#oncogenic_mutations\n')
+        outf.write('\tHIGHEST_LEVEL\toncogenic_mutations\t#actionable_mutations\t#oncogenic_mutations')
+
+        for l in dxpxLevels:
+            outf.write('\t' + l)
+
+        outf.write('\n')
         isample = headers['SAMPLE_ID']
 
         for row in reader:
@@ -551,6 +577,11 @@ def processclinicaldata(annotatedmutfiles, clinicalfile, outfile):
             outf.write('\t' + drivermutations)
             outf.write('\t' + str(actionablecount))
             outf.write('\t' + str(drivercount))
+
+            for l in dxpxLevels:
+                outf.write('\t')
+                if sample in samplelevels and l in samplelevels[sample]:
+                    outf.write(";".join(samplelevels[sample][l]))
 
             outf.write('\n')
 
