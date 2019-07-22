@@ -8,13 +8,14 @@ def main(argv):
 
     annotatedclinicalfile = ''
     outputpdffile = ''
+    type = 'clinical'
     params = {
         "catogerycolumn": "CANCER_TYPE",
         "thresholdcat": 0
     }
 
     try:
-        opts, args = getopt.getopt(argv, "hi:o:c:s:n:l:")
+        opts, args = getopt.getopt(argv, "hi:o:c:s:n:l:t:")
     except getopt.GetoptError:
         print 'for help: python OncoKBPlots.py -h'
         sys.exit(2)
@@ -27,6 +28,8 @@ def main(argv):
             print '    HIGHEST_LEVEL: Highest OncoKB levels'
             print '  Supported levels (-l): '
             print '    LEVEL_1,LEVEL_2A,LEVEL_2B,LEVEL_3A,LEVEL_3B,LEVEL_4,ONCOGENIC,VUS'
+            print '  Supported plot type: '
+            print '    therapeutic(default), diagnostic, prognostic'
             sys.exit()
         elif opt in ("-i"):
             annotatedclinicalfile = arg
@@ -40,14 +43,21 @@ def main(argv):
             params["thresholdcat"] = int(arg)
         elif opt in ("-l"):
             params["levels"] = arg.split(",")
+        elif opt in ("-t"):
+            type = arg
 
-    if annotatedclinicalfile == '' or outputpdffile== '':
+    if annotatedclinicalfile == '' or outputpdffile == '' or type not in ['therapeutic', 'diagnostic', 'prognostic']:
         print 'for help: python OncoKBPlots.py -h'
         sys.exit(2)
 
     print 'annotating ' + annotatedclinicalfile + "..."
 
-    plotclinicalactionability(annotatedclinicalfile, outputpdffile, params)
+    if type == "diagnostic":
+        plotdiagnosticactionability(annotatedclinicalfile, outputpdffile, params)
+    elif type == "prognostic":
+        plotprognosticactionability(annotatedclinicalfile, outputpdffile, params)
+    else:
+        plotclinicalactionability(annotatedclinicalfile, outputpdffile, params)
 
     print 'done!'
 
