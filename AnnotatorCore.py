@@ -13,7 +13,8 @@ import matplotlib.pyplot as plt
 
 csv.field_size_limit(sys.maxsize) # for reading large files
 
-oncokbapiurl = "https://oncokb.org/api/v1"
+# oncokbapiurl = "https://oncokb.org/api/v1"
+oncokbapiurl = "http://localhost:8080/oncokb-public/api/v1"
 
 def setoncokbbaseurl(u):
     global oncokbapiurl
@@ -38,8 +39,7 @@ def setsampleidsfileterfile(f):
 
 levels = [
     'LEVEL_1',
-    'LEVEL_2A',
-    'LEVEL_2B',
+    'LEVEL_2',
     'LEVEL_3A',
     'LEVEL_3B',
     'LEVEL_4',
@@ -616,8 +616,7 @@ def plotclinicalactionability(annotatedclinicalfile, outfile, parameters):
     # level colors
     levelcolors = {
         'LEVEL_1': '#33A02C',
-        'LEVEL_2A': '#1F78B4',
-        'LEVEL_2B': '#80B1D3',
+        'LEVEL_2': '#1F78B4',
         'LEVEL_3A': '#984EA3',
         'LEVEL_3B': '#BE98CE',
         'LEVEL_4': '#a8a8a8',
@@ -632,8 +631,7 @@ def plotclinicalactionability(annotatedclinicalfile, outfile, parameters):
     # level legend
     levellegend = {
         'LEVEL_1': 'Level 1',
-        'LEVEL_2A': 'Level 2A',
-        'LEVEL_2B': 'Level 2B',
+        'LEVEL_2': 'Level 2',
         'LEVEL_3A': 'Level 3A',
         'LEVEL_3B': 'Level 3B',
         'LEVEL_4': 'Level 4',

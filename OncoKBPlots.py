@@ -26,7 +26,7 @@ def main(argv):
             print '    SAMPLE_ID: sample ID'
             print '    HIGHEST_LEVEL: Highest OncoKB levels'
             print '  Supported levels (-l): '
-            print '    LEVEL_1,LEVEL_2A,LEVEL_2B,LEVEL_3A,LEVEL_3B,LEVEL_4,ONCOGENIC,VUS'
+            print '    LEVEL_1,LEVEL_2,LEVEL_3A,LEVEL_3B,LEVEL_4,ONCOGENIC,VUS'
             sys.exit()
         elif opt in ("-i"):
             annotatedclinicalfile = arg
@@ -57,7 +57,7 @@ if __name__ == "__main__":
     #     '-o', '/Users/jgao/projects/oncokb-annotator/process/mskimpact/data_clinical_2017-11-01.oncokb.pdf',#'data/example_clinical.oncokb.pdf',
     #     '-c', 'CANCER_TYPE',
     #     '-n', '100',
-    #     '-l', 'LEVEL_1,LEVEL_2A,LEVEL_2B,LEVEL_3A,LEVEL_3B,LEVEL_4'
+    #     '-l', 'LEVEL_1,LEVEL_2,LEVEL_3A,LEVEL_3B,LEVEL_4'
     # ]
     # main(argv)
 
