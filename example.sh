@@ -9,10 +9,10 @@ IC="data/example_clinical.txt"
 OC="data/example_clinical.oncokb.txt"
 OCPDF="data/example_clinical.oncokb.pdf"
 README="data/example_README.txt"
-OT="" #OncoKB API Token
-python MafAnnotator.py -i $IMAF -o $OMAF -c $IC -b $OT
-python FusionAnnotator.py -i $IF -o $OF -c $IC -b $OT
-python CnaAnnotator.py -i $ICNA -o $OCNA -c $IC -b $OT
+TOKEN="" #OncoKB API Token
+python MafAnnotator.py -i $IMAF -o $OMAF -c $IC -b $TOKEN
+python FusionAnnotator.py -i $IF -o $OF -c $IC -b $TOKEN
+python CnaAnnotator.py -i $ICNA -o $OCNA -c $IC -b $TOKEN
 python ClinicalDataAnnotator.py -i $IC -o $OC -a $OMAF,$OCNA,$OF
 python OncoKBPlots.py -i $OC -o $OCPDF -c ONCOTREE_CODE #-n 10
 python GenarateReadMe.py -o $README
